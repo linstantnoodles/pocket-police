@@ -10,8 +10,13 @@
         "matches": [
             "<all_urls>"
         ],
-        "js": ["jquery-3.2.1.min.js", "content.js"],
-        "css": ["style.css"]
+        "js": [
+          "jquery-3.2.1.min.js",
+          "api-client.js",
+          "element-tagger.js",
+          "button.js",
+          "content.js"
+        ]
     }
   ],
   "background": {

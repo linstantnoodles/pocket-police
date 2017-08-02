@@ -1,55 +1,73 @@
-(function (window, $, config) {
+(function (window, $, elementTagger, config) {
 
     window.pocketPolice = window.pocketPolice || {};
     window.pocketPolice.button = {
         initialize: initialize
-    }
+    };
 
-    function $buttonElement;
+    var $buttonElement;
 
     function initialize() {
         createButtonElement();
+        addEventListeners();
     }
 
     function createButtonElement() {
         $buttonElement = $('<span/>', {
-            style: config.style
+            css: config.style
         }).html('Make an arrest');
         $('body').append($buttonElement);
     }
 
     function addEventListeners() {
-        $('body').mouseenter(mouseOverImageHandler);
+        $('body').mouseover(mouseOverImageHandler);
+        $('body').mouseout(mouseOutImageHandler);
+        $buttonElement.click(buttonClickHandler);
     }
 
     function mouseOverImageHandler(event) {
-        var target = $(event.target);
-        if (target.is('img')) {
-            showButtonRelativeToElement(target);
+        var $target = $(event.target);
+        if ($target.is($buttonElement)) {
+            return;
+        }
+        if ($target.is('img')) {
+            elementTagger.stageElementForTagging($target);
+            showButtonRelativeToElement($target);
         }
     }
 
+    function mouseOutImageHandler(event) {
+        var $target = $(event.target);
+        var $mouseToElement = $(event.toElement || event.relatedTarget);
+        if ($target.is($buttonElement) || $mouseToElement.is($buttonElement)) {
+            return;
+        }
+        $buttonElement.hide();
+    }
+
+    function buttonClickHandler(event) {
+        elementTagger.tagStagedElements();
+    }
+
     function showButtonRelativeToElement(element) {
-        var position = getElementPosition(element);
+        var position = element.offset();
+        console.log(element);
+        console.log(position.left);
+        console.log(position.top);
+        console.log($buttonElement.offset());
+        $buttonElement.css({
+            'display': 'block'
+        });
         $buttonElement.offset({
             'left': position.left,
             'top': position.top
         });
+        console.log("element after offset");
+        console.log($buttonElement.attr('left'));
         $buttonElement.show();
     }
 
-    function getElementPosition(element) {
-        var x = 0, y = 0;
-        if (element.offsetParent) {
-            do {
-              x = x + element.offsetLeft;
-              y = y + element.offsetTop;
-            } while (element = element.offsetParent);
-            return {'left': x, 'top': y};
-        }
-    }
-
-})(window, $, {
+})(window, $, window.pocketPolice.elementTagger, {
     'style': {
         'border-radius': '3px',
         'text-indent': '20px',
@@ -60,6 +78,7 @@
         'font-weight': 'bold',
         'color': '#fff',
         'background-size': '14px 14px',
+        'background-color': 'pink',
         // extra stuff for extensions only
         'position': 'absolute',
         'opacity': '1',
