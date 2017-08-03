@@ -8,6 +8,7 @@ Policing pockets 24/7
  * basically, do not allow flagging of already flagged images on the FE
 * Add time created to BE
  * maybe also IP address
+ * Handle single page apps? i.e REI where you can filter
 
  Issues
  * Tags multiple at same time

@@ -19,8 +19,6 @@
             var id = x['item_id'];
             return id;
         });
-        console.log("Marking ids");
-        console.log(ids);
         markTaggedElements(ids);
     }
 
@@ -49,7 +47,6 @@
     }
 
     function markElement(id) {
-        var src = chrome.extension.getURL("prison-cell-bars.png");
         var img = $(document).find('img[src$="' + id + '"]');
         if (img.length) {
             console.log("Image found with ID: " + id);
@@ -57,84 +54,53 @@
             if (ignoreElement($img)) {
                 return;
             }
-            var overlayImg = $('<img/>', {
-                class: 'pp-overlay',
-                src: src,
-                css: {
-                    top: $img.offset().top,
-                    left: $img.offset().left,
-                    position: 'absolute',
-                    width: $img.width(),
-                    height: $img.height(),
-                    'pointer-events': 'none'
-                }
-            });
-            console.log("Overlaying this image: ");
-            console.log($img);
-            $('body').append(overlayImg);
+            insertOverlayImageOverElement($img);
         }
+    }
+
+    function insertOverlayImageOverElement($element) {
+        var $img = $('<img/>', {
+            class: config.overlay_img.class,
+            src: config.overlay_img.src,
+            css: config.overlay_img.css
+        });
+        $img.offset($element.offset());
+        $img.width($element.width());
+        $img.height($element.height());
+        $('body').append($img);
     }
 
     function ignoreElement($element) {
         console.log("----------- ignoreElement()")
-        var ignoreClasses = config.element_ignore.classes;
-        if (!$element.attr('class')) {
-            return;
+        var results = []
+        if ($element.attr('class')) {
+            var ignoreClasses = config.element_ignore.class_list;
+            var elementClasses = $element.attr("class").split(/\s+/);
+            results.push(elementsIntersect(ignoreClasses, elementClasses));
         }
-        var elementClasses = $element.attr("class").split(/\s+/);
-        console.log("Element classes: ");
-        console.log(elementClasses);
-        console.log("ignore classes:");
-        console.log(ignoreClasses);
-        for (var i = 0; i < ignoreClasses; i++) {
-            var ignoreClass = ignoreClass[i];
-            if (elementClasses.indexOf(ignoreClass) >= 0) {
-                console.log("Ignore!");
+        return results.indexOf(true) >= 0;
+    }
+
+    function elementsIntersect(array_one, array_two) {
+        for (var i = 0; i < array_one.length; i++) {
+            var element = array_one[i];
+            if (array_two.indexOf(element) >= 0) {
                 return true;
             }
         }
         return false;
     }
 
-    // function markElement(id) {
-    //     console.log("marking element with id " + id);
-    //     // var src = 'https://media1.britannica.com/eb-media/65/61865-004-A58B1676.jpg';
-    //     var src = chrome.extension.getURL("prison-cell-bars.png");
-    //     var img = $(document).find('img[src$="' + id + '"]');
-    //     if (img.length) {
-    //         var position = $(img).offset();
-    //         // $(img).attr('src', src);
-    //         // $(img).attr('srcset', src);
-    //         // var $overlay = $('<div id="wtf"></div>');
-    //         // $overlay.css({
-    //         //     position: 'relative'
-    //         // });
-    //         // $overlay.css({
-    //         //     display: 'block',
-    //         //     width: $(img).width(),
-    //         //     height: $(img).height(),
-    //         //     backgroundPosition: 'center center',
-    //         //     backgroundImage: "url(" + src + ")"
-    //         // });
-    //         var $img = $(img);
-    //         var overlayImg = $('<img/>', {src: src, css: {
-    //             width: $(img).width(),
-    //             height: $(img).height(),
-    //             padding: $img.css('padding-top') + ' ' + $img.css('padding-right') + ' ' + $img.css('padding-bottom') + ' ' + $img.css('padding-left'),
-    //             display: 'none'
-    //         }});
-    //         $('body').append(overlayImg);
-    //         overlayImg.css({'display': 'block'});
-    //         overlayImg.offset(position);
-    //         overlayImg.show();
-    //         // $(img).wrap($overlay);
-    //         // console.log(overlayImg);
-    //         // $('#wtf').append(overlayImg);
-    //     }
-    // }
-
 })(window, $, window.pocketPolice.apiClient, {
     'element_ignore': {
-        'classes': ['pp-overlay']
+        'class_list': ['pp-overlay']
+    },
+    'overlay_img': {
+        'class': 'pp-overlay',
+        'src': chrome.extension.getURL("prison-cell-bars.png"),
+        'css': {
+            'position': 'absolute',
+            'pointer-events': 'none'
+        }
     }
 });
