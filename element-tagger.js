@@ -25,7 +25,7 @@
     }
 
     function stageElementForTagging (element) {
-        $stagedElements.push(element);
+        $stagedElements = [element];
     }
 
     function tagStagedElements () {
@@ -57,33 +57,30 @@
             if (ignoreElement($img)) {
                 return;
             }
-
-
-
-            var $overlay = $('<div/>');
-            $overlay.css({
-                position: 'relative'
-            });
-            var overlayImage = $('<img/>', {
+            var overlayImg = $('<img/>', {
                 class: 'pp-overlay',
                 src: src,
                 css: {
-                    top: $img.position().top,
-                    left: $img.position().left,
+                    top: $img.offset().top,
+                    left: $img.offset().left,
                     position: 'absolute',
                     width: $img.width(),
                     height: $img.height(),
                     'pointer-events': 'none'
                 }
             });
-            $img.wrap($overlay);
-            $img.after(overlayImage);
+            console.log("Overlaying this image: ");
+            console.log($img);
+            $('body').append(overlayImg);
         }
     }
 
     function ignoreElement($element) {
         console.log("----------- ignoreElement()")
         var ignoreClasses = config.element_ignore.classes;
+        if (!$element.attr('class')) {
+            return;
+        }
         var elementClasses = $element.attr("class").split(/\s+/);
         console.log("Element classes: ");
         console.log(elementClasses);
