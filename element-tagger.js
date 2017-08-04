@@ -24,7 +24,7 @@
     function taggedItemsRequestHandler(status, responseText) {
         var items = JSON.parse(responseText);
         var ids = items.map(function(x) {
-            var id = x['item_id'];
+            var id = atob(x['item_id']);
             return id;
         });
         markedElementIds = markedElementIds.concat(ids);
@@ -38,7 +38,6 @@
     function tagStagedElements () {
         $stagedElements.forEach(function ($element) {
             var id = $element.attr('src');
-            console.log("Tagging element with id " + id);
             markedElementIds.push(id);
             markElement(id);
             apiClient.postTagRequest(id);
@@ -57,10 +56,8 @@
     }
 
     function markElement(id) {
-        console.log("Marking element with ID: " + id);
         var img = $(document).find('img[src$="' + id + '"]');
         if (img.length) {
-            console.log("Image found with ID: " + id + ' ... now TAGGING!');
             var $img = $(img);
             if (ignoreElement($img)) {
                 return;

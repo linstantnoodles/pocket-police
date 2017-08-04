@@ -12,3 +12,4 @@ Policing pockets 24/7
 
  Issues
  * Tags multiple at same time
+ * src that contain ampersands causing url to be split up

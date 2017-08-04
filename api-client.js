@@ -15,7 +15,7 @@
         var params = [
             "hostname="+hostname,
             "&item_page_url="+itemPageUrl,
-            "&item_id="+itemId
+            "&item_id="+btoa(itemId)
             ].join('');
         xhr.open("POST", endpoint + "/flag", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
