@@ -71,12 +71,19 @@
         var originalSrc = $element.attr('src');
         var originalWidth = $element.width();
         var originalHeight = $element.height();
-        $element.attr('src', config.overlay_img.src);
-        $element.addClass('pp-overlay');
-        $element.width(originalWidth);
-        $element.height(originalHeight);
-        $element.css({'background': 'url(' + originalSrc + ')'});
-        $element.css({'background-size': originalWidth + 'px' + ' ' + originalHeight + 'px'});
+        $element.hide(0, function () {
+            $element.addClass('pp-overlay');
+            $element.attr('src', config.overlay_img.src);
+            $element.width(originalWidth);
+            $element.height(originalHeight);
+            $element.css({
+                'background': 'url(' + originalSrc + ')',
+                'background-size': originalWidth + 'px' + ' ' + originalHeight + 'px'
+            });
+            $element.animate({
+                width:'show'
+            }, 500);
+        });
     }
 
     function ignoreElement($element) {
