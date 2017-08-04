@@ -55,8 +55,8 @@
             'display': 'block'
         });
         $buttonElement.offset({
-            'left': position.left,
-            'top': position.top
+            'left': position.left + 10,
+            'top': position.top + 10
         });
         $buttonElement.show();
     }
@@ -71,8 +71,10 @@
         'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
         'font-weight': 'bold',
         'color': '#fff',
-        'background-size': '14px 14px',
-        'background-color': 'pink',
+        'background-color': '#005CB9',
+        'background-size': '20px 20px',
+        'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
+        'background-repeat': 'no-repeat',
         // extra stuff for extensions only
         'position': 'absolute',
         'opacity': '1',
