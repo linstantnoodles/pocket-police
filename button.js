@@ -51,10 +51,6 @@
 
     function showButtonRelativeToElement(element) {
         var position = element.offset();
-        console.log(element);
-        console.log(position.left);
-        console.log(position.top);
-        console.log($buttonElement.offset());
         $buttonElement.css({
             'display': 'block'
         });
@@ -62,8 +58,6 @@
             'left': position.left,
             'top': position.top
         });
-        console.log("element after offset");
-        console.log($buttonElement.attr('left'));
         $buttonElement.show();
     }
 

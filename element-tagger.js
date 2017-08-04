@@ -7,10 +7,18 @@
         tagStagedElements: tagStagedElements
     };
 
+    var markedElementIds = [];
     var $stagedElements = [];
 
     function initialize() {
         apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
+        addEventListeners();
+    }
+
+    function addEventListeners() {
+        $(document).mousemove(function (event) {
+            markTaggedElements(markedElementIds);
+        });
     }
 
     function taggedItemsRequestHandler(status, responseText) {
@@ -19,6 +27,7 @@
             var id = x['item_id'];
             return id;
         });
+        markedElementIds = markedElementIds.concat(ids);
         markTaggedElements(ids);
     }
 
@@ -30,6 +39,7 @@
         $stagedElements.forEach(function ($element) {
             var id = $element.attr('src');
             console.log("Tagging element with id " + id);
+            markedElementIds.push(id);
             markElement(id);
             apiClient.postTagRequest(id);
         });
@@ -47,31 +57,32 @@
     }
 
     function markElement(id) {
+        console.log("Marking element with ID: " + id);
         var img = $(document).find('img[src$="' + id + '"]');
         if (img.length) {
-            console.log("Image found with ID: " + id);
+            console.log("Image found with ID: " + id + ' ... now TAGGING!');
             var $img = $(img);
             if (ignoreElement($img)) {
                 return;
             }
-            insertOverlayImageOverElement($img);
+            addOverlayToImage($img);
         }
     }
 
-    function insertOverlayImageOverElement($element) {
-        var $img = $('<img/>', {
-            class: config.overlay_img.class,
-            src: config.overlay_img.src,
-            css: config.overlay_img.css
-        });
-        $img.offset($element.offset());
-        $img.width($element.width());
-        $img.height($element.height());
-        $('body').append($img);
+    function addOverlayToImage($element) {
+        // http://www.cssmojo.com/png_overlay_with_no_extra_markup/
+        var originalSrc = $element.attr('src');
+        var originalWidth = $element.width();
+        var originalHeight = $element.height();
+        $element.attr('src', config.overlay_img.src);
+        $element.addClass('pp-overlay');
+        $element.width(originalWidth);
+        $element.height(originalHeight);
+        $element.css({'background': 'url(' + originalSrc + ')'});
+        $element.css({'background-size': originalWidth + 'px' + ' ' + originalHeight + 'px'});
     }
 
     function ignoreElement($element) {
-        console.log("----------- ignoreElement()")
         var results = []
         if ($element.attr('class')) {
             var ignoreClasses = config.element_ignore.class_list;
