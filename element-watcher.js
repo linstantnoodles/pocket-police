@@ -18,15 +18,12 @@
                 if (closestAnchorElement.length) {
                     var href = $(closestAnchorElement).attr('href');
                     if (href.indexOf('#') < 0) {
-                        console.log("Great! Followable link. Add the image");
                         var src = $target.attr('src');
-                        if (src === chrome.extension.getURL("prison-cell-bars.png")) {
+                        if (src === chrome.extension.getURL("cage.png")) {
                             return;
                         }
                         chrome.storage.sync.set({
                             'thumbnail_img_src': src
-                        }, function() {
-                            console.log("Saved " + src);
                         });
                     }
                 }

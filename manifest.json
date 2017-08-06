@@ -5,8 +5,14 @@
   "web_accessible_resources": [
       "arrest-btn.png",
       "release-btn.png",
-      "cage.png"
+      "cage.png",
+      "icon-off.png"
    ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
   "content_scripts": [
     {
         "matches": [
@@ -23,8 +29,8 @@
     }
   ],
   "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_icon": "icon-on.png"
+    // "default_popup": "popup.html"
   },
   "permissions": [
     "http://*/*",
