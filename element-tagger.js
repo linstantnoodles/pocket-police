@@ -3,8 +3,11 @@
     window.pocketPolice = window.pocketPolice || {};
     window.pocketPolice.elementTagger = {
         initialize: initialize,
-        stageElementForTagging: stageElementForTagging,
-        tagStagedElements: tagStagedElements
+        stageElement: stageElement,
+        stagedElements: stagedElements,
+        tagStagedElements: tagStagedElements,
+        elementTagged: elementTagged,
+        untagStagedElements: untagStagedElements
     };
 
     var taggedElements = {};
@@ -72,6 +75,7 @@
         $element.hide(0, function () {
             $element.addClass('pp-overlay');
             $element.attr('src', config.overlay_img.src);
+            $element.attr('data-pp-id', originalSrc);
             $element.width(originalWidth);
             $element.height(originalHeight);
             $element.css({
@@ -84,6 +88,12 @@
         });
     }
 
+    function removeOverlayFromImage($element) {
+        var originalSrc = $element.attr('data-pp-id');
+        $element.removeClass(config.overlay_img.class);
+        $element.attr('src', originalSrc);
+    }
+
     function elementHasOverlay(id) {
         var taggedElement = taggedElements[id];
         return taggedElement && taggedElements[id].has_overlay === true;
@@ -94,8 +104,19 @@
             has_overlay: value
         };
     }
+    function stagedElements(idx) {
+        return $stagedElements[idx];
+    }
 
-    function stageElementForTagging (element) {
+    function elementTagged($element) {
+        var src = $element.attr('src');
+        var itemId = $element.attr('data-pp-id');
+        var hasProp = taggedElements.hasOwnProperty(itemId);
+        var hasSrc = taggedElements.hasOwnProperty(src);
+        return hasProp;
+    }
+
+    function stageElement (element) {
         $stagedElements = [element];
     }
 
@@ -106,6 +127,15 @@
             apiClient.postTagRequest(id);
         });
         resetStaging();
+    }
+
+    function untagStagedElements () {
+        $stagedElements.forEach(function ($element) {
+            var id = $element.attr('data-pp-id');
+            delete taggedElements[id];
+            removeOverlayFromImage($element);
+            apiClient.postUntagRequest(id);
+        });
     }
 
     function resetStaging() {
@@ -140,8 +170,7 @@
         'class': 'pp-overlay',
         'src': chrome.extension.getURL("prison-cell-bars.png"),
         'css': {
-            'position': 'absolute',
-            'pointer-events': 'none'
+            'position': 'absolute'
         }
     }
 });

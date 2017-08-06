@@ -5,84 +5,156 @@
         initialize: initialize
     };
 
-    var $buttonElement;
+    var $visibleButton;
+    var $arrestButton;
+    var $releaseButton;
 
     function initialize() {
-        createButtonElement();
+        addButtons();
         addEventListeners();
     }
 
-    function createButtonElement() {
-        $buttonElement = $('<span/>', {
-            css: config.style
+    function addButtons() {
+        $arrestButton = arrestButtonElement();
+        $releaseButton = releaseButtonElement();
+        $('body').append(
+            $arrestButton
+        );
+        $('body').append(
+            $releaseButton
+        );
+    }
+
+    function arrestButtonElement() {
+        return $('<span/>', {
+            css: config.arrest_button.css
         }).html('Make an arrest');
-        $('body').append($buttonElement);
+    }
+
+    function releaseButtonElement() {
+        return $('<span/>', {
+            css: config.release_button.css
+        }).html('Release');
     }
 
     function addEventListeners() {
         $('body').mouseover(mouseOverImageHandler);
         $('body').mouseout(mouseOutImageHandler);
-        $buttonElement.click(buttonClickHandler);
+        $arrestButton.click(arrestButtonClickHandler);
+        $releaseButton.click(releaseButtonClickHandler);
     }
 
     function mouseOverImageHandler(event) {
         var $target = $(event.target);
-        if ($target.is($buttonElement)) {
-            return;
-        }
-        if ($target.is('img')) {
-            elementTagger.stageElementForTagging($target);
+        setVisibleButton($target);
+        if (validTargetElement($target)) {
+            elementTagger.stageElement($target);
             showButtonRelativeToElement($target);
         }
     }
 
-    function mouseOutImageHandler(event) {
-        var $target = $(event.target);
-        var $mouseToElement = $(event.toElement || event.relatedTarget);
-        if ($target.is($buttonElement) || $mouseToElement.is($buttonElement)) {
-            return;
+    function setVisibleButton($element) {
+        if (elementTagger.elementTagged($element)) {
+            $visibleButton = $releaseButton;
+        } else {
+            $visibleButton = $arrestButton;
         }
-        $buttonElement.hide();
     }
 
-    function buttonClickHandler(event) {
+    function mouseOutImageHandler(event) {
+        if (!$visibleButton) {
+            return;
+        }
+        var $target = $(event.target);
+        var $mouseToElement = $(event.toElement || event.relatedTarget);
+        if ($target.is($visibleButton) || $mouseToElement.is($visibleButton)) {
+            return;
+        }
+        $visibleButton.hide();
+    }
+
+    function releaseButtonClickHandler(event) {
+        elementTagger.untagStagedElements();
+        $releaseButton.hide();
+    }
+
+    function arrestButtonClickHandler(event) {
+        var stagedElement = elementTagger.stagedElements(0);
         elementTagger.tagStagedElements();
+        $arrestButton.hide();
     }
 
     function showButtonRelativeToElement(element) {
         var position = element.offset();
-        $buttonElement.css({
+        $visibleButton.css({
             'display': 'block'
         });
-        $buttonElement.offset({
+        $visibleButton.offset({
             'left': position.left + 10,
             'top': position.top + 10
         });
-        $buttonElement.show();
+        $visibleButton.show();
+    }
+
+    function validTargetElement($element) {
+        if (!$element.is('img')) {
+            return false;
+        }
+        if ($element.width() <= $visibleButton.width() || $element.height() <= $visibleButton.height()) {
+            return false;
+        }
+        return true;
     }
 
 })(window, $, window.pocketPolice.elementTagger, {
-    'style': {
-        'border-radius': '3px',
-        'text-indent': '20px',
-        'width': 'auto',
-        'padding': '0 4px 0 0',
-        'text-align': 'center',
-        'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
-        'font-weight': 'bold',
-        'color': '#fff',
-        'background-color': '#005CB9',
-        'background-size': '20px 20px',
-        'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
-        'background-repeat': 'no-repeat',
-        // extra stuff for extensions only
-        'position': 'absolute',
-        'opacity': '1',
-        'zIndex': '8675309',
-        'display': 'none',
-        'cursor': 'pointer',
-        'border': 'none',
-        'font-weight': 'bold',
-        '-webkit-font-smoothing': 'antialiased'
+    'arrest_button': {
+        'css': {
+            'border-radius': '3px',
+            'text-indent': '20px',
+            'width': 'auto',
+            'padding': '0 4px 0 0',
+            'text-align': 'center',
+            'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
+            'font-weight': 'bold',
+            'color': '#fff',
+            'background-color': '#005CB9',
+            'background-size': '20px 20px',
+            'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
+            'background-repeat': 'no-repeat',
+            // extra stuff for extensions only
+            'position': 'absolute',
+            'opacity': '1',
+            'zIndex': '8675309',
+            'display': 'none',
+            'cursor': 'pointer',
+            'border': 'none',
+            'font-weight': 'bold',
+            '-webkit-font-smoothing': 'antialiased'
+        }
+    },
+    'release_button': {
+        'css': {
+            'border-radius': '3px',
+            'text-indent': '20px',
+            'width': 'auto',
+            'padding': '0 4px 0 0',
+            'text-align': 'center',
+            'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
+            'font-weight': 'bold',
+            'color': '#fff',
+            'background-color': 'green',
+            'background-size': '20px 20px',
+            'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
+            'background-repeat': 'no-repeat',
+            // extra stuff for extensions only
+            'position': 'absolute',
+            'opacity': '1',
+            'zIndex': '8675309',
+            'display': 'none',
+            'cursor': 'pointer',
+            'border': 'none',
+            'font-weight': 'bold',
+            '-webkit-font-smoothing': 'antialiased'
+        }
     }
 });
