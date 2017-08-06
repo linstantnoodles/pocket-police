@@ -116,10 +116,10 @@
             'text-align': 'center',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
-            'color': '#fff',
-            'background-color': '#005CB9',
+            // 'color': '#fff',
+            // 'background-color': '#005CB9',
             'background-size': '20px 20px',
-            'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
+            'background-image': 'url(' + chrome.extension.getURL('arrest-btn-2.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
             'position': 'absolute',

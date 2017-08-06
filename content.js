@@ -26,4 +26,10 @@
         button.initialize();
         elementTagger.initialize();
     }
-})(window, window.pocketPolice.button, window.pocketPolice.elementTagger, window.pocketPolice.apiClient);
+})(
+    window,
+    window.pocketPolice.button,
+    window.pocketPolice.elementTagger,
+    window.pocketPolice.elementWatcher,
+    window.pocketPolice.apiClient
+);

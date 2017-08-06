@@ -4,7 +4,9 @@
   "version": "0.3",
   "web_accessible_resources": [
       "prison-cell-bars.png",
-      "arrest-btn.png"
+      "arrest-btn.png",
+      "arrest-btn-2.png",
+      "release-btn.png"
    ],
   "content_scripts": [
     {
@@ -14,6 +16,7 @@
         "js": [
           "jquery-3.2.1.min.js",
           "api-client.js",
+          "element-watcher.js",
           "element-tagger.js",
           "button.js",
           "content.js"
@@ -21,7 +24,7 @@
     }
   ],
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon-2.png",
     "default_popup": "popup.html"
   },
   "permissions": [

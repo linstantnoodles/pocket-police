@@ -1,4 +1,4 @@
-(function (window, $, apiClient, config) {
+(function (window, $, apiClient, elementWatcher, config) {
 
     window.pocketPolice = window.pocketPolice || {};
     window.pocketPolice.elementTagger = {
@@ -121,6 +121,7 @@
     }
 
     function tagStagedElements () {
+        elementWatcher.tagThumbnailImage();
         $stagedElements.forEach(function ($element) {
             var id = $element.attr('src');
             markElement(id);
@@ -162,7 +163,7 @@
         return false;
     }
 
-})(window, $, window.pocketPolice.apiClient, {
+})(window, $, window.pocketPolice.apiClient, window.pocketPolice.elementWatcher, {
     'element_ignore': {
         'class_list': ['pp-overlay']
     },
