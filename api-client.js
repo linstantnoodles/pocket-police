@@ -12,6 +12,7 @@
     var endpoint = "https://synthetic-diode-621.appspot.com";
 
     function initialize(userid) {
+        console.log("apiClient initialing with " + userid);
         userId = userid;
     }
 
@@ -43,7 +44,7 @@
 
     function getTaggedByHostnameRequest(responseHandler) {
         var xhr = new XMLHttpRequest();
-        var params = "hostname=" + encodeURIComponent(window.location.hostname);
+        var params = defaultParams().concat(["&hostname=" + encodeURIComponent(window.location.hostname)]).join('');
         xhr.open("GET", endpoint + "/flagged-items?" + params, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
@@ -54,7 +55,9 @@
     }
 
     function defaultParams() {
-        return ['userid=' + userId];
+        console.log("defautl params");
+        console.log(userId);
+        return ['userid=' + userId, '&cache=' + (new Date().getTime())];
     }
 
 })(window, $);

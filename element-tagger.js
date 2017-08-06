@@ -169,7 +169,7 @@
     },
     'overlay_img': {
         'class': 'pp-overlay',
-        'src': chrome.extension.getURL("prison-cell-bars.png"),
+        'src': chrome.extension.getURL("cage.png"),
         'css': {
             'position': 'absolute'
         }

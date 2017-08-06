@@ -28,13 +28,13 @@
     function arrestButtonElement() {
         return $('<span/>', {
             css: config.arrest_button.css
-        }).html('Make an arrest');
+        });
     }
 
     function releaseButtonElement() {
         return $('<span/>', {
             css: config.release_button.css
-        }).html('Release');
+        });
     }
 
     function addEventListeners() {
@@ -110,16 +110,14 @@
     'arrest_button': {
         'css': {
             'border-radius': '3px',
-            'text-indent': '20px',
             'width': 'auto',
             'padding': '0 4px 0 0',
             'text-align': 'center',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
-            // 'color': '#fff',
-            // 'background-color': '#005CB9',
-            'background-size': '20px 20px',
-            'background-image': 'url(' + chrome.extension.getURL('arrest-btn-2.png') + ')',
+            'background-size': '75px 75px',
+            'padding': '40px',
+            'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
             'position': 'absolute',
@@ -135,16 +133,14 @@
     'release_button': {
         'css': {
             'border-radius': '3px',
-            'text-indent': '20px',
             'width': 'auto',
             'padding': '0 4px 0 0',
             'text-align': 'center',
+            'padding': '40px',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
-            'color': '#fff',
-            'background-color': 'green',
-            'background-size': '20px 20px',
-            'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
+            'background-size': '75px 75px',
+            'background-image': 'url(' + chrome.extension.getURL('release-btn.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
             'position': 'absolute',

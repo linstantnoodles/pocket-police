@@ -1,4 +1,4 @@
-(function (window, button, elementTagger, apiClient) {
+(function (window, button, elementTagger, elementWatcher, apiClient) {
     function getRandomToken() {
         var randomPool = new Uint8Array(32);
         crypto.getRandomValues(randomPool);
@@ -12,19 +12,22 @@
     chrome.storage.sync.get('userid', function(items) {
         var userid = items.userid;
         if (userid) {
+            console.log("id found: " + userid);
             initialize(userid);
         } else {
             userid = getRandomToken();
-            chrome.storage.sync.set({ userid: userid }, function() {
-                initialize(userid);
+            chrome.storage.sync.set({ userid: userid }, function(items) {
+                console.log("in setting " + userid);
+                initialize(items.userid);
             });
         }
     });
 
     function initialize(userid) {
         apiClient.initialize(userid);
-        button.initialize();
+        elementWatcher.initialize();
         elementTagger.initialize();
+        button.initialize();
     }
 })(
     window,
