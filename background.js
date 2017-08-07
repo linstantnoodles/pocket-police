@@ -11,6 +11,9 @@ chrome.browserAction.onClicked.addListener(function(tab) {
                 }
             });
             chrome.storage.sync.set({'show_pp': false});
+            broadcastMessage({
+                'show_pp': false
+            });
         } else {
             chrome.browserAction.setIcon({
                 path: {
@@ -21,6 +24,17 @@ chrome.browserAction.onClicked.addListener(function(tab) {
                 }
             });
             chrome.storage.sync.set({'show_pp': true});
+            broadcastMessage({
+                'show_pp': true
+            });
         }
     });
 });
+
+function broadcastMessage(message) {
+    chrome.tabs.query({}, function(tabs) {
+        for (var i=0; i < tabs.length; ++i) {
+            chrome.tabs.sendMessage(tabs[i].id, message);
+        }
+    });
+}

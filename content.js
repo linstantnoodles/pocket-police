@@ -1,5 +1,4 @@
 (function (window, button, elementTagger, elementWatcher, apiClient, config) {
-
     chrome.storage.sync.get('userid', function(items) {
         var userid = items.userid;
         if (userid) {

@@ -8,6 +8,7 @@
     var $visibleButton;
     var $arrestButton;
     var $releaseButton;
+    var enabled = true;
 
     function initialize() {
         addButtons();
@@ -42,9 +43,19 @@
         $('body').mouseout(mouseOutImageHandler);
         $arrestButton.click(arrestButtonClickHandler);
         $releaseButton.click(releaseButtonClickHandler);
+        chrome.runtime.onMessage.addListener(extensionMessagehandler);
+    }
+
+    function extensionMessagehandler(message) {
+        if (message && message.hasOwnProperty('show_pp')) {
+            enabled = message.show_pp;
+        }
     }
 
     function mouseOverImageHandler(event) {
+        if (!enabled) {
+            return;
+        }
         var $target = $(event.target);
         setVisibleButton($target);
         if (validTargetElement($target)) {

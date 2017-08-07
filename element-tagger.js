@@ -12,6 +12,7 @@
 
     var taggedElements = {};
     var $stagedElements = [];
+    var enabled = true;
 
     function initialize() {
         apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
@@ -30,8 +31,24 @@
 
     function addEventListeners() {
         $(document).mousemove(function (event) {
+            if(!enabled) {
+                return;
+            }
             markTaggedElements();
         });
+        chrome.runtime.onMessage.addListener(extensionMessagehandler);
+    }
+
+    function extensionMessagehandler(message) {
+        if (message && message.hasOwnProperty('show_pp')) {
+            enabled = message.show_pp;
+            if(enabled) {
+                markTaggedElements();
+            } else {
+                console.log("Unmarking");
+                unmarkTaggedElements();
+            }
+        }
     }
 
     function markTaggedElements() {
@@ -40,6 +57,16 @@
                 markElement(elementId);
             }
         }
+    }
+
+    function unmarkTaggedElements() {
+        $(document)
+            .find('img[src*="' + config.overlay_img.src + '"]')
+            .each(function (index, element) {
+                var $img = $(this);
+                removeOverlayFromImage($img);
+                updateHasOverlay($img.attr('data-pp-id'), false);
+        });
     }
 
     function markElement(id) {
