@@ -79,10 +79,11 @@
         }
         var $target = $(event.target);
         var $mouseToElement = $(event.toElement || event.relatedTarget);
-        if ($mouseToElement.is($visibleButton) || $mouseToElement.is($target)) {
+        if (!$mouseToElement.is($target) && $mouseToElement.is($visibleButton)) {
             return;
         }
-        $visibleButton.hide();
+        $releaseButton.hide();
+        $arrestButton.hide();
     }
 
     function releaseButtonClickHandler(event) {
@@ -130,7 +131,7 @@
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
             'background-size': '75px 75px',
-            'padding': '40px',
+            'padding': '35px',
             'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
@@ -150,7 +151,7 @@
             'width': 'auto',
             'padding': '0 4px 0 0',
             'text-align': 'center',
-            'padding': '40px',
+            'padding': '35px',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
             'background-size': '75px 75px',
