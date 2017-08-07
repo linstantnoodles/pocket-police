@@ -12,9 +12,10 @@
 
     var taggedElements = {};
     var $stagedElements = [];
-    var enabled = true;
+    var enabled;
 
-    function initialize() {
+    function initialize(show_pp) {
+        enabled = show_pp;
         apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
         addEventListeners();
     }
@@ -31,9 +32,6 @@
 
     function addEventListeners() {
         $(document).mousemove(function (event) {
-            if(!enabled) {
-                return;
-            }
             markTaggedElements();
         });
         chrome.runtime.onMessage.addListener(extensionMessagehandler);
@@ -45,13 +43,15 @@
             if(enabled) {
                 markTaggedElements();
             } else {
-                console.log("Unmarking");
                 unmarkTaggedElements();
             }
         }
     }
 
     function markTaggedElements() {
+        if(!enabled) {
+            return;
+        }
         for (elementId in taggedElements) {
             if (taggedElements.hasOwnProperty(elementId)) {
                 markElement(elementId);
@@ -196,9 +196,6 @@
     },
     'overlay_img': {
         'class': 'pp-overlay',
-        'src': chrome.extension.getURL("cage.png"),
-        'css': {
-            'position': 'absolute'
-        }
+        'src': chrome.extension.getURL("cage.png")
     }
 });

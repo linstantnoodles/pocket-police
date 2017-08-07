@@ -1,32 +1,29 @@
 (function (window, button, elementTagger, elementWatcher, apiClient, config) {
-    chrome.storage.sync.get('userid', function(items) {
+    chrome.storage.sync.get({
+        userid: '',
+        show_pp: true
+    }, function(items) {
         var userid = items.userid;
-        if (userid) {
-            console.log("id found: " + userid);
-            initialize(userid);
-        } else {
+        var show_pp = items.show_pp;
+        if (!userid) {
             userid = getRandomToken();
-            chrome.storage.sync.set({ userid: userid }, function(items) {
-                console.log("in setting " + userid);
-                initialize(items.userid);
-            });
+            chrome.storage.sync.set({ userid: userid });
         }
+        initialize(userid, show_pp);
     });
 
-    function initialize(userid) {
+    function initialize(userid, show_pp) {
         var hostname = window.location.hostname;
         var privateSites = config.private_sites;
         for (var i = 0; i < privateSites.length; i++) {
-            console.log(hostname);
-            console.log(privateSites[i]);
             if (hostname.match(privateSites[i])) {
                 return;
             }
         }
         apiClient.initialize(userid);
         elementWatcher.initialize();
-        elementTagger.initialize();
-        button.initialize();
+        elementTagger.initialize(show_pp);
+        button.initialize(show_pp);
     }
 
     function getRandomToken() {

@@ -12,7 +12,6 @@
     var endpoint = "https://synthetic-diode-621.appspot.com";
 
     function initialize(userid) {
-        console.log("apiClient initialing with " + userid);
         userId = userid;
     }
 
@@ -55,8 +54,6 @@
     }
 
     function defaultParams() {
-        console.log("defautl params");
-        console.log(userId);
         return ['userid=' + userId, '&cache=' + (new Date().getTime())];
     }
 

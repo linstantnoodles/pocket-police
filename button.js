@@ -8,9 +8,10 @@
     var $visibleButton;
     var $arrestButton;
     var $releaseButton;
-    var enabled = true;
+    var enabled;
 
-    function initialize() {
+    function initialize(show_pp) {
+        enabled = show_pp;
         addButtons();
         addEventListeners();
     }
@@ -78,7 +79,7 @@
         }
         var $target = $(event.target);
         var $mouseToElement = $(event.toElement || event.relatedTarget);
-        if ($target.is($visibleButton) || $mouseToElement.is($visibleButton)) {
+        if ($mouseToElement.is($visibleButton) || $mouseToElement.is($target)) {
             return;
         }
         $visibleButton.hide();
@@ -111,7 +112,9 @@
         if (!$element.is('img')) {
             return false;
         }
-        if ($element.width() <= $visibleButton.width() || $element.height() <= $visibleButton.height()) {
+        var minWidth = $visibleButton.width() + 25;
+        var minHeight = $visibleButton.height() + 25;
+        if ($element.width() <=  minWidth || $element.height() <= minHeight) {
             return false;
         }
         return true;
