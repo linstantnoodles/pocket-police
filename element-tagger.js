@@ -16,10 +16,9 @@
 
     function initialize(show_pp) {
         enabled = show_pp;
-        if (!enabled) {
-            return;
+        if (enabled) {
+            apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
         }
-        apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
         addEventListeners();
     }
 
