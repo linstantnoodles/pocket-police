@@ -16,6 +16,9 @@
 
     function initialize(show_pp) {
         enabled = show_pp;
+        if (!enabled) {
+            return;
+        }
         apiClient.getTaggedByHostnameRequest(taggedItemsRequestHandler);
         addEventListeners();
     }
@@ -31,6 +34,7 @@
     }
 
     function addEventListeners() {
+        $(document).off('mousemove');
         $(document).mousemove(function (event) {
             markTaggedElements();
         });
@@ -41,7 +45,7 @@
         if (message && message.hasOwnProperty('show_pp')) {
             enabled = message.show_pp;
             if(enabled) {
-                markTaggedElements();
+                initialize(enabled);
             } else {
                 unmarkTaggedElements();
             }

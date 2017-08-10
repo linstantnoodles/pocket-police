@@ -1,29 +1,27 @@
 (function (window, button, elementTagger, elementWatcher, apiClient, config) {
+    if (privateSite()) {
+        return;
+    }
+
     chrome.storage.sync.get({
         userid: '',
         show_pp: true
-    }, function(items) {
-        var userid = items.userid;
-        var show_pp = items.show_pp;
-        if (!userid) {
-            userid = getRandomToken();
-            chrome.storage.sync.set({ userid: userid });
-        }
-        initialize(userid, show_pp);
-    });
+    }, initializeWithStorageData);
 
-    function initialize(userid, show_pp) {
-        var hostname = window.location.hostname;
-        var privateSites = config.private_sites;
-        for (var i = 0; i < privateSites.length; i++) {
-            if (hostname.match(privateSites[i])) {
-                return;
-            }
-        }
+    function initializeWithStorageData(items) {
+        var userid = items.userid || getAndSaveNewUserId();
+        var show_pp = items.show_pp;
+
         apiClient.initialize(userid);
         elementWatcher.initialize();
         elementTagger.initialize(show_pp);
         button.initialize(show_pp);
+    }
+
+    function getAndSaveNewUserId() {
+        var userid = getRandomToken();
+        chrome.storage.sync.set({ userid: userid });
+        return userid;
     }
 
     function getRandomToken() {
@@ -34,6 +32,17 @@
             hex += randomPool[i].toString(16);
         }
         return hex;
+    }
+
+    function privateSite() {
+        var hostname = window.location.hostname;
+        var privateSites = config.private_sites;
+        for (var i = 0; i < privateSites.length; i++) {
+            if (hostname.match(privateSites[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
 })(
