@@ -130,8 +130,8 @@
             'text-align': 'center',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
-            'background-size': '75px 75px',
-            'padding': '35px',
+            'background-size': '55px 55px',
+            'padding': '30px',
             'background-image': 'url(' + chrome.extension.getURL('arrest-btn.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
@@ -151,10 +151,10 @@
             'width': 'auto',
             'padding': '0 4px 0 0',
             'text-align': 'center',
-            'padding': '35px',
+            'padding': '30px',
             'font': '11px/20px "Helvetica Neue", Helvetica, sans-serif',
             'font-weight': 'bold',
-            'background-size': '75px 75px',
+            'background-size': '55px 55px',
             'background-image': 'url(' + chrome.extension.getURL('release-btn.png') + ')',
             'background-repeat': 'no-repeat',
             // extra stuff for extensions only
