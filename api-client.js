@@ -9,7 +9,7 @@
     };
 
     var userId;
-    var endpoint = "https://synthetic-diode-621.appspot.com";
+    var endpoint = "https://fast-falls-18582.herokuapp.com";
 
     function initialize(userid) {
         userId = userid;
